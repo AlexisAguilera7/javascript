@@ -6,7 +6,7 @@ let productos = [
  {
   nombre: "camisetas",
   precio: 900,
- },
+ },                            //array de productos con nombre y precio
  {
   nombre: "tableros",
   precio: 1500,
@@ -22,34 +22,29 @@ let opcionSeleccionada;
 let carrito = [];
 
 for (let i = 0; i < productos.length; i++) {
- listaDeProductos = listaDeProductos + ((i + 1) + "-" + productos[i].nombre + " - $" + productos[i].precio + "\n")
-};
+ listaDeProductos = listaDeProductos + ((i + 1) + "-" + productos[i].nombre + " - $" + productos[i].precio + "\n");
+}
 listaDeProductos += "0-para finalizar la compra\n" + "\n ingrese el producto que desea comprar";
 
 do {
  opcionSeleccionada = prompt(listaDeProductos); //pido que productos agrega
  if ((opcionSeleccionada > 0) && (opcionSeleccionada <= productos.length)) { //condiciones segun la lista de productos 
-  carrito.push(productos[opcionSeleccionada - 1].precio)  //resto uno porque arranca de cero
- };
+  carrito.push(productos[opcionSeleccionada - 1].precio);  //resto uno porque arranca de cero
+ }
 } while (
  opcionSeleccionada != 0             //0 para finalizar la compra
 );
 
-console.log(carrito);
+let incluirEnvio = prompt("¿Desea incluir envío a domicilio? (S/N)");
 
-let total = carrito.reduce((a, b) => a + b, 0);
-
-let envio = confirm("¿Desea agregar envío a domicilio por $200?"); // Preguntar si desea envio
-
-if (envio) {
- total += 200;
+if (incluirEnvio.toLowerCase() === "s") {
+ let costoEnvio = 300;
+ carrito.push(costoEnvio);
 }
-alert(`El total a pagar es: $${total}`);
 
-//mostrar productos al usuario
-//pedirle al usuario el producto que desea comprar
-//que cantidad desea de cada producto
-//agrega envio a domocilio 
-//calcular total, productos maas envio 
-// Sumamos los precios de los productos seleccionados en el carrito
-// Mostramos el total a pagar en un mensaje de alerta
+let total = 0;
+for (let i = 0; i < carrito.length; i++) {
+ total += carrito[i];
+}
+
+alert(`El total a pagar es: $${total}`);
