@@ -43,8 +43,13 @@ if (incluirEnvio.toLowerCase() === "s") {
 }
 
 let total = 0;
-for (let i = 0; i < carrito.length; i++) {
- total += carrito[i];
-}
+
+calcularTotal(carrito)
 
 alert(`El total a pagar es: $${total}`);
+
+function calcularTotal(listaCarrito) {
+ for (let i = 0; i < listaCarrito.length; i++) {
+  total += listaCarrito[i];
+ }
+}
