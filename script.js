@@ -1,39 +1,34 @@
-let productos = [
- {
-  nombre: "pelota",
-  precio: 500,
- },
- {
-  nombre: "camisetas",
-  precio: 900,
- },                            //array de productos con nombre y precio
- {
-  nombre: "tableros",
-  precio: 1500,
- },
- {
-  nombre: "zapatillas",
-  precio: 3000,
+class Producto {
+ constructor(nombre, precio) {
+  this.nombre = nombre;
+  this.precio = precio;
  }
-];
+}
+
+const producto1 = new Producto("pelota", 500);
+const producto2 = new Producto("camiseta", 900);
+const producto3 = new Producto("tablero", 1500);
+const producto4 = new Producto("zapatillas", 3000);
+
+const PRODUCTOS = [producto1, producto2, producto3, producto4];
 
 let listaDeProductos = "";
 let opcionSeleccionada;
 let carrito = [];
 
-for (let i = 0; i < productos.length; i++) {
- listaDeProductos = listaDeProductos + ((i + 1) + "-" + productos[i].nombre + " - $" + productos[i].precio + "\n");
+for (let i = 0; i < PRODUCTOS.length; i++) {
+ listaDeProductos += `${i + 1}-${PRODUCTOS[i].nombre} - $${PRODUCTOS[i].precio}\n`;
 }
-listaDeProductos += "0-para finalizar la compra\n" + "\n ingrese el producto que desea comprar";
+listaDeProductos += "0-para finalizar la compra\n\nIngrese el número del producto que desea comprar";
 
 do {
- opcionSeleccionada = prompt(listaDeProductos); //pido que productos agrega
- if ((opcionSeleccionada > 0) && (opcionSeleccionada <= productos.length)) { //condiciones segun la lista de productos 
-  carrito.push(productos[opcionSeleccionada - 1].precio);  //resto uno porque arranca de cero
+ opcionSeleccionada = parseInt(prompt(listaDeProductos));
+ if (opcionSeleccionada > 0 && opcionSeleccionada <= PRODUCTOS.length) {
+  carrito.push(PRODUCTOS[opcionSeleccionada - 1].precio);
+ } else if (opcionSeleccionada > PRODUCTOS.length || opcionSeleccionada < 0 || isNaN(opcionSeleccionada)) {
+  alert("Elija una opción válida");
  }
-} while (
- opcionSeleccionada != 0             //0 para finalizar la compra
-);
+} while (opcionSeleccionada !== 0);
 
 let incluirEnvio = prompt("¿Desea incluir envío a domicilio? (S/N)");
 
@@ -44,7 +39,7 @@ if (incluirEnvio.toLowerCase() === "s") {
 
 let total = 0;
 
-calcularTotal(carrito)
+calcularTotal(carrito);
 
 alert(`El total a pagar es: $${total}`);
 
