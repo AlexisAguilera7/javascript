@@ -30,21 +30,17 @@ do {
  }
 } while (opcionSeleccionada !== 0);
 
-let incluirEnvio = prompt("¿Desea incluir envío a domicilio? (S/N)");
+if (carrito.length > 0) {
+ let incluirEnvio = prompt("¿Desea incluir envío a domicilio? (S/N)");
 
-if (incluirEnvio.toLowerCase() === "s") {
- let costoEnvio = 300;
- carrito.push(costoEnvio);
-}
-
-let total = 0;
-
-calcularTotal(carrito);
-
-alert(`El total a pagar es: $${total}`);
-
-function calcularTotal(listaCarrito) {
- for (let i = 0; i < listaCarrito.length; i++) {
-  total += listaCarrito[i];
+ if (incluirEnvio.toLowerCase() === "s") {
+  let costoEnvio = 300;
+  carrito.push(costoEnvio);
  }
+
+ const total = carrito.reduce((acumulador, precio) => acumulador + precio, 0);
+
+ alert(`El total a pagar es: $${total}`);
+} else {
+ alert("No se han agregado productos al carrito. Gracias por visitar nuestra tienda.");
 }
