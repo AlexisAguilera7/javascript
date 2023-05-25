@@ -40,7 +40,7 @@ if (carrito.length > 0) {
 
  const total = carrito.reduce((acumulador, precio) => acumulador + precio, 0);  //funcion reduce para sumar los precios de los objetos elejidos 
 
- alert(`El total a pagar es: $${total}`);                                       //mensaje de alerta con el monto total 
+ alert(`El total a pagar es: $${total}`);                                       //mensaje con el monto total 
 } else {
- alert("No se han agregado productos al carrito. Gracias por visitar nuestra tienda.");
+ alert("No se han agregado productos al carrito, gracias por visitar nuestra tienda!");
 }
