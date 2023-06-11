@@ -18,6 +18,9 @@ const PRODUCTOS = [producto1, producto2, producto3, producto4];
 
 function crearCardProducto(productoCard) {
  const cardProductos = document.getElementById("cardProductos");
+ if (localStorage.getItem("carrito")) {
+  carrito = JSON.parse(localStorage.getItem("carrito"));
+ }
  productoCard.forEach((producto) => {
   let divCard = document.createElement("div");
   divCard.id = producto.id;
@@ -47,6 +50,7 @@ function agregarAlCarrito(producto) {
   precio: producto.precio,
   imagen: producto.imagen,
  });
+ localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
 crearCardProducto(PRODUCTOS);
@@ -55,7 +59,7 @@ const verCarrito = document.getElementById("carrito");
 const mostrarCarrito = document.getElementById("carritoDeCompras");
 
 verCarrito.addEventListener("click", () => {
- mostrarCarrito.innerHTML = ""; // Limpiar el contenido del carrito antes de mostrarlo nuevamente
+ mostrarCarrito.innerHTML = "";
 
  const carritoCompras = document.createElement("div");
  carritoCompras.className = "compras";
@@ -70,21 +74,26 @@ verCarrito.addEventListener("click", () => {
       <img src="${producto.imagen}">
       <h2>${producto.nombre}</h2>
       <p>$${producto.precio}</p>
-      <button class="btn btn-primary btnEliminar">X</button>
+      <button class="btn btn-primary btnEliminar">Eliminar</button>
     `;
   mostrarCarrito.append(carritocontent);
 
   const botonEliminar = carritocontent.querySelector(".btnEliminar");
   botonEliminar.addEventListener("click", () => {
    eliminarDelCarrito(producto.id);
+   mostrarCarrito.removeChild(carritocontent);
+
   });
  });
-
+ function eliminarDelCarrito(id) {
+  carrito = carrito.filter((producto) => producto.id !== id);
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+ }
  const total = carrito.reduce((acc, prod) => acc + prod.precio, 0);
 
  const totalCompra = document.createElement("button");
  totalCompra.className = "btn btn-primary";
  totalCompra.innerText = `Finalizar compra $${total}`;
  mostrarCarrito.append(totalCompra);
-
 });
+

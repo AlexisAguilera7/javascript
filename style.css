@@ -7,7 +7,7 @@
 .titulo {
  text-align: center;
  color: brown;
- font-size: 5rem
+ font-size: 5rem;
 }
 
 #cardProductos {
@@ -15,5 +15,18 @@
  flex-wrap: wrap;
  justify-content: space-between;
  margin: 2rem;
+}
 
+#carritoDeCompras {
+ display: flex;
+ flex-wrap: wrap;
+
+}
+
+.btn {
+ width: 200px;
+}
+
+.btn-primary {
+ height: 50px;
 }
