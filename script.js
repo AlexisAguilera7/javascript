@@ -1,44 +1,90 @@
+let carrito = [];
+
 class Producto {
- constructor(nombre, precio) {
+ constructor(id, nombre, precio, imagen) {
+  this.id = id;
   this.nombre = nombre;
   this.precio = precio;
+  this.imagen = imagen;
  }
 }
 
-const producto1 = new Producto("pelota", 500);
-const producto2 = new Producto("camiseta", 900);
-const producto3 = new Producto("tablero", 1500);
-const producto4 = new Producto("zapatillas", 3000);
+const producto1 = new Producto(1, "Pelota", 500, "./multimedia/pelota.jpeg");
+const producto2 = new Producto(2, "Camiseta", 900, "./multimedia/camiseta.jpeg");
+const producto3 = new Producto(3, "Tablero", 1500, "./multimedia/tableros.jpeg");
+const producto4 = new Producto(4, "Zapatillas", 3000, "./multimedia/zapatillas.jpeg");
 
 const PRODUCTOS = [producto1, producto2, producto3, producto4];
 
-let listaDeProductos = PRODUCTOS.map((producto, index) => `${index + 1}-${producto.nombre} - $${producto.precio}`).join("\n");
-listaDeProductos += "\n0-para finalizar la compra\n\nIngrese el número del producto que desea comprar";
+function crearCardProducto(productoCard) {
+ const cardProductos = document.getElementById("cardProductos");
+ productoCard.forEach((producto) => {
+  let divCard = document.createElement("div");
+  divCard.id = producto.id;
+  divCard.innerHTML = `
+      <div class="card" style="width: 18rem;">
+        <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
+        <div class="card-body">
+          <h5 class="card-title">${producto.nombre}</h5>
+          <p class="card-text">Precio $${producto.precio}</p>
+          <input type="button" class="agregarAlCarrito btn btn-primary" value="Agregar al carrito">
+        </div>
+      </div>`;
 
-let opcionSeleccionada;
-let carrito = [];
+  cardProductos.append(divCard);
 
-do {
- opcionSeleccionada = parseInt(prompt(listaDeProductos));
-
- if (opcionSeleccionada > 0 && opcionSeleccionada <= PRODUCTOS.length) {
-  carrito.push(PRODUCTOS[opcionSeleccionada - 1].precio);
- } else if (isNaN(opcionSeleccionada)) {
-  alert("Elija una opción válida");
- }
-} while (opcionSeleccionada !== 0);
-
-if (carrito.length > 0) {
- let incluirEnvio = prompt("¿Desea incluir envío a domicilio? (S/N)");
-
- if (incluirEnvio.toLowerCase() === "s") {
-  let costoEnvio = 300;
-  carrito.push(costoEnvio);
- }
-
- const total = carrito.reduce((acumulador, precio) => acumulador + precio, 0);
-
- alert(`El total a pagar es: $${total}`);
-} else {
- alert("No se han agregado productos al carrito, gracias por visitar nuestra tienda!");
+  const botonAgregar = divCard.querySelector(".agregarAlCarrito");
+  botonAgregar.addEventListener("click", () => {
+   agregarAlCarrito(producto);
+  });
+ });
 }
+
+function agregarAlCarrito(producto) {
+ carrito.push({
+  id: producto.id,
+  nombre: producto.nombre,
+  precio: producto.precio,
+  imagen: producto.imagen,
+ });
+}
+
+crearCardProducto(PRODUCTOS);
+
+const verCarrito = document.getElementById("carrito");
+const mostrarCarrito = document.getElementById("carritoDeCompras");
+
+verCarrito.addEventListener("click", () => {
+ mostrarCarrito.innerHTML = ""; // Limpiar el contenido del carrito antes de mostrarlo nuevamente
+
+ const carritoCompras = document.createElement("div");
+ carritoCompras.className = "compras";
+ carritoCompras.innerHTML = `
+    <h2 class="carrito">Carrito</h2>
+  `;
+ mostrarCarrito.append(carritoCompras);
+
+ carrito.forEach((producto) => {
+  let carritocontent = document.createElement("div");
+  carritocontent.innerHTML = `
+      <img src="${producto.imagen}">
+      <h2>${producto.nombre}</h2>
+      <p>$${producto.precio}</p>
+      <button class="btn btn-primary btnEliminar">X</button>
+    `;
+  mostrarCarrito.append(carritocontent);
+
+  const botonEliminar = carritocontent.querySelector(".btnEliminar");
+  botonEliminar.addEventListener("click", () => {
+   eliminarDelCarrito(producto.id);
+  });
+ });
+
+ const total = carrito.reduce((acc, prod) => acc + prod.precio, 0);
+
+ const totalCompra = document.createElement("button");
+ totalCompra.className = "btn btn-primary";
+ totalCompra.innerText = `Finalizar compra $${total}`;
+ mostrarCarrito.append(totalCompra);
+
+});
