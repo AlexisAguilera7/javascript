@@ -16,11 +16,15 @@ const producto4 = new Producto(4, "Zapatillas", 3000, "./multimedia/zapatillas.j
 
 const PRODUCTOS = [producto1, producto2, producto3, producto4];
 
-function crearCardProducto(productoCard) {
-  const cardProductos = document.getElementById("cardProductos");
+function actualizarCarrito() {
   if (localStorage.getItem("carrito")) {
     carrito = JSON.parse(localStorage.getItem("carrito"));
   }
+}
+
+function crearCardProducto(productoCard) {
+  const cardProductos = document.getElementById("cardProductos");
+  actualizarCarrito();
   productoCard.forEach((producto) => {
     let divCard = document.createElement("div");
     divCard.id = producto.id;
