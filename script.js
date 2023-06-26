@@ -1,20 +1,7 @@
 let carrito = [];
 
-class Producto {
-  constructor(id, nombre, precio, imagen) {
-    this.id = id;
-    this.nombre = nombre;
-    this.precio = precio;
-    this.imagen = imagen;
-  }
-}
 
-const producto1 = new Producto(1, "Pelota", 500, "./multimedia/pelota.jpeg");
-const producto2 = new Producto(2, "Camiseta", 900, "./multimedia/camiseta.jpeg");
-const producto3 = new Producto(3, "Tablero", 1500, "./multimedia/tableros.jpeg");
-const producto4 = new Producto(4, "Zapatillas", 3000, "./multimedia/zapatillas.jpeg");
 
-const PRODUCTOS = [producto1, producto2, producto3, producto4];
 
 function actualizarCarrito() {
   if (localStorage.getItem("carrito")) {
@@ -22,13 +9,17 @@ function actualizarCarrito() {
   }
 }
 
-function crearCardProducto(productoCard) {
-  const cardProductos = document.getElementById("cardProductos");
-  actualizarCarrito();
-  productoCard.forEach((producto) => {
-    let divCard = document.createElement("div");
-    divCard.id = producto.id;
-    divCard.innerHTML = `
+const getProductos = async () => {
+  const respuesta = await fetch("productos.json");
+  const productos = respuesta.json();
+
+  function crearCardProducto(productoCard) {
+    const cardProductos = document.getElementById("cardProductos");
+    actualizarCarrito();
+    productoCard.forEach((producto) => {
+      let divCard = document.createElement("div");
+      divCard.id = producto.id;
+      divCard.innerHTML = `
       <div class="card" style="width: 18rem;">
         <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
         <div class="card-body">
@@ -38,26 +29,31 @@ function crearCardProducto(productoCard) {
         </div>
       </div>`;
 
-    cardProductos.append(divCard);
+      cardProductos.append(divCard);
 
-    const botonAgregar = divCard.querySelector(".agregarAlCarrito");
-    botonAgregar.addEventListener("click", () => {
-      agregarAlCarrito(producto);
+      const botonAgregar = divCard.querySelector(".agregarAlCarrito");
+      botonAgregar.addEventListener("click", () => {
+        agregarAlCarrito(producto);
+      });
     });
-  });
-}
+  }
 
-function agregarAlCarrito(producto) {
-  carrito.push({
-    id: producto.id,
-    nombre: producto.nombre,
-    precio: producto.precio,
-    imagen: producto.imagen,
-  });
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-}
+  function agregarAlCarrito(producto) {
+    carrito.push({
+      id: producto.id,
+      nombre: producto.nombre,
+      precio: producto.precio,
+      imagen: producto.imagen,
+    });
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+  }
 
-crearCardProducto(PRODUCTOS);
+  crearCardProducto(productos);
+
+}
+getProductos();
+
+
 
 const verCarrito = document.getElementById("carrito");
 const mostrarCarrito = document.getElementById("carritoDeCompras");
