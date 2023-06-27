@@ -1,8 +1,4 @@
-
 let carrito = [];
-
-
-
 
 function actualizarCarrito() {
   if (localStorage.getItem("carrito")) {
@@ -54,15 +50,12 @@ const getProductos = async () => {
       imagen: producto.imagen,
     });
     localStorage.setItem("carrito", JSON.stringify(carrito));
-
   }
 
   crearCardProducto(productos);
+};
 
-}
 getProductos();
-
-
 
 const verCarrito = document.getElementById("carrito");
 const mostrarCarrito = document.getElementById("carritoDeCompras");
@@ -100,10 +93,12 @@ verCarrito.addEventListener("click", () => {
       }).showToast();
     });
   });
+
   function eliminarDelCarrito(id) {
     carrito = carrito.filter((producto) => producto.id !== id);
     localStorage.setItem("carrito", JSON.stringify(carrito));
   }
+
   const total = carrito.reduce((acc, prod) => acc + prod.precio, 0);
 
   const totalCompra = document.createElement("button");
@@ -112,47 +107,55 @@ verCarrito.addEventListener("click", () => {
   totalCompra.innerText = `Finalizar compra $${total}`;
   mostrarCarrito.append(totalCompra);
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const finalizarCompra = document.getElementById("finalizarCompra");
-    finalizarCompra.addEventListener("click", () => {
-      const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
+  const finalizarCompra = document.getElementById("finalizarCompra");
+
+  finalizarCompra.addEventListener("click", () => {
+    if (carrito.length === 0) {
+      Toastify({
+        text: "El carrito está vacío",
+        style: {
+          background: "linear-gradient(to right, #e94545, #ffbf3f)",
         },
-        buttonsStyling: false
-      });
-
-      swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          swalWithBootstrapButtons.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          );
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Your imaginary file is safe :)',
-            'error'
-          );
-        }
-      });
-    });
-
-
+        duration: 2000,
+      }).showToast();
+    } else {
+      mostrarAlerta();
+    }
   });
 
 
+  function mostrarAlerta() {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    });
 
-})
+    swalWithBootstrapButtons.fire({
+      title: 'Deseas finalizar la compra?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        swalWithBootstrapButtons.fire(
+          'Genial',
+          'compra realizada',
+          'success'
+        );
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire(
+          'Compra cancelada',
+          'Te invitamos a seguir mirando nuestras ofertas :)',
+          'error'
+        );
+      };
+    });
+  };
+});
