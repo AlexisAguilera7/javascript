@@ -1,3 +1,4 @@
+
 let carrito = [];
 
 
@@ -11,7 +12,7 @@ function actualizarCarrito() {
 
 const getProductos = async () => {
   const respuesta = await fetch("productos.json");
-  const productos = respuesta.json();
+  const productos = await respuesta.json();
 
   function crearCardProducto(productoCard) {
     const cardProductos = document.getElementById("cardProductos");
@@ -34,6 +35,13 @@ const getProductos = async () => {
       const botonAgregar = divCard.querySelector(".agregarAlCarrito");
       botonAgregar.addEventListener("click", () => {
         agregarAlCarrito(producto);
+        Toastify({
+          text: "Agregado al carrito",
+          style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+          },
+          duration: 2000,
+        }).showToast();
       });
     });
   }
@@ -46,6 +54,7 @@ const getProductos = async () => {
       imagen: producto.imagen,
     });
     localStorage.setItem("carrito", JSON.stringify(carrito));
+
   }
 
   crearCardProducto(productos);
@@ -82,7 +91,13 @@ verCarrito.addEventListener("click", () => {
     botonEliminar.addEventListener("click", () => {
       eliminarDelCarrito(producto.id);
       mostrarCarrito.removeChild(carritocontent);
-
+      Toastify({
+        text: "Producto eliminado",
+        style: {
+          background: "red",
+        },
+        duration: 2000,
+      }).showToast();
     });
   });
   function eliminarDelCarrito(id) {
@@ -92,8 +107,52 @@ verCarrito.addEventListener("click", () => {
   const total = carrito.reduce((acc, prod) => acc + prod.precio, 0);
 
   const totalCompra = document.createElement("button");
+  totalCompra.id = "finalizarCompra";
   totalCompra.className = "btn btn-primary";
   totalCompra.innerText = `Finalizar compra $${total}`;
   mostrarCarrito.append(totalCompra);
-});
 
+  document.addEventListener("DOMContentLoaded", () => {
+    const finalizarCompra = document.getElementById("finalizarCompra");
+    finalizarCompra.addEventListener("click", () => {
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+
+      swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swalWithBootstrapButtons.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          );
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            'Cancelled',
+            'Your imaginary file is safe :)',
+            'error'
+          );
+        }
+      });
+    });
+
+
+  });
+
+
+
+})

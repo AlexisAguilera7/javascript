@@ -3,24 +3,24 @@
   "id": 1,
   "nombre": "Pelota",
   "precio": 500,
-  "imagen": "./multimedia/pelota.jpeg",
+  "imagen": "./multimedia/pelota.jpeg"
  },
  {
   "id": 2,
   "nombre": "Camiseta",
   "precio": 900,
-  "imagen": "./multimedia/camiseta.jpeg",
+  "imagen": "./multimedia/camiseta.jpeg"
  },
  {
   "id": 3,
   "nombre": "Tableros",
   "precio": 1500,
-  "imagen": "./multimedia/tableros.jpeg",
+  "imagen": "./multimedia/tableros.jpeg"
  },
  {
   "id": 4,
   "nombre": "Zapatillas",
   "precio": 3000,
-  "imagen": "./multimedia/zapatillas.jpeg",
+  "imagen": "./multimedia/zapatillas.jpeg"
  }
 ]
