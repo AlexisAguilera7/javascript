@@ -1,17 +1,17 @@
 let carrito = [];
 
 function actualizarCarrito() {
-  if (localStorage.getItem("carrito")) {
+  if (localStorage.getItem("carrito")) {               // Función para actualizar el carrito desde el almacenamiento local
     carrito = JSON.parse(localStorage.getItem("carrito"));
   }
 }
 
 const getProductos = async () => {
-  const respuesta = await fetch("productos.json");
+  const respuesta = await fetch("productos.json");      // Función asincrónica para obtener los productos del archivo JSON
   const productos = await respuesta.json();
 
   function crearCardProducto(productoCard) {
-    const cardProductos = document.getElementById("cardProductos");
+    const cardProductos = document.getElementById("cardProductos");   //creando las cards de los productos
     actualizarCarrito();
     productoCard.forEach((producto) => {
       let divCard = document.createElement("div");
@@ -42,7 +42,7 @@ const getProductos = async () => {
     });
   }
 
-  function agregarAlCarrito(producto) {
+  function agregarAlCarrito(producto) {    //funcion para agregar productos al carrito 
     carrito.push({
       id: producto.id,
       nombre: producto.nombre,
@@ -60,15 +60,17 @@ getProductos();
 const verCarrito = document.getElementById("carrito");
 const mostrarCarrito = document.getElementById("carritoDeCompras");
 
-verCarrito.addEventListener("click", () => {
+verCarrito.addEventListener("click", () => {         //abre el carro al hacer click
   mostrarCarrito.innerHTML = "";
-
+  mostrarCarrito.style.display = "block";
   const carritoCompras = document.createElement("div");
   carritoCompras.className = "compras";
   carritoCompras.innerHTML = `
     <h2 class="carrito">Carrito</h2>
+    <button id="cerrarCarrito">X</button>
   `;
   mostrarCarrito.append(carritoCompras);
+
 
   carrito.forEach((producto) => {
     let carritocontent = document.createElement("div");
@@ -80,7 +82,7 @@ verCarrito.addEventListener("click", () => {
     `;
     mostrarCarrito.append(carritocontent);
 
-    const botonEliminar = carritocontent.querySelector(".btnEliminar");
+    const botonEliminar = carritocontent.querySelector(".btnEliminar");  //eliminar productos del carrito
     botonEliminar.addEventListener("click", () => {
       eliminarDelCarrito(producto.id);
       mostrarCarrito.removeChild(carritocontent);
@@ -99,17 +101,23 @@ verCarrito.addEventListener("click", () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
   }
 
-  const total = carrito.reduce((acc, prod) => acc + prod.precio, 0);
+  const total = carrito.reduce((acc, prod) => acc + prod.precio, 0);    //reduce para sumar el total
 
-  const totalCompra = document.createElement("button");
+  const totalCompra = document.createElement("button");  //boton de finalizar la compra
   totalCompra.id = "finalizarCompra";
   totalCompra.className = "btn btn-primary";
+
+
   totalCompra.innerText = `Finalizar compra $${total}`;
   mostrarCarrito.append(totalCompra);
 
+  const cerrarCarrito = document.getElementById("cerrarCarrito")  //cerrar el carrito
+  cerrarCarrito.addEventListener("click", () => {
+    mostrarCarrito.style.display = "none";
+  })
   const finalizarCompra = document.getElementById("finalizarCompra");
 
-  finalizarCompra.addEventListener("click", () => {
+  finalizarCompra.addEventListener("click", () => {         //mensajes de alerta para finalizar la compra
     if (carrito.length === 0) {
       Toastify({
         text: "El carrito está vacío",

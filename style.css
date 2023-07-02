@@ -5,7 +5,7 @@
 }
 
 .titulo {
- text-align: center;
+ margin-left: 20px;
  color: brown;
  font-size: 5rem;
 }
@@ -18,10 +18,17 @@
 }
 
 #carritoDeCompras {
- display: flex;
- flex-wrap: wrap;
-
+ display: none;
+ position: fixed;
+ z-index: 999;
+ left: 0;
+ top: 0;
+ width: 70%;
+ height: 70%;
+ overflow: auto;
+ background-color: rgba(0, 0, 0, 0.4);
 }
+
 
 .btn {
  width: 200px;
@@ -29,4 +36,23 @@
 
 .btn-primary {
  height: 50px;
+}
+
+nav {
+ display: flex;
+ justify-content: space-between;
+
+}
+
+#carrito {
+
+ margin-top: 10px;
+ margin-right: 10px;
+}
+
+#cerrarCarrito {
+ color: #aaa;
+ float: right;
+ font-size: 28px;
+ font-weight: bold;
 }
